@@ -1,0 +1,8 @@
+<div class="cell">
+    <select ng-model="subject.operator" ng-options="operator for operator in subject.operatorOpts" class="form-control"></select>
+</div>
+<div class="cell cell-large">
+    <ul class="list-group">
+        <li class="list-group-item" ng-repeat="(key, value) in getOptions()"><input type="checkbox" id="{{ $id }}_{{key}}" ng-checked="isObjectSelected(key)" ng-click="selectObject($event, key)" /> <label for="{{ $id }}_{{key}}">{{ value }}</label></li>
+    </ul>
+</div>

@@ -1,0 +1,21 @@
+{
+    "name": "opifer/rulesengine-bundle",
+    "type": "symfony-bundle",
+    "description": "Opifer RulesEngineBundle",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Opifer",
+            "homepage": "http://www.opifer.nl/"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/framework-bundle": "~2.4",
+
+        "opifer/rulesengine": "dev-master"
+    },
+    "autoload": {
+        "psr-4": { "Opifer\\RulesEngineBundle\\": "" }
+    }
+}

@@ -1,0 +1,34 @@
+parameters:
+
+services:
+    opifer.rulesengine.form.ruleeditor:
+        class: Opifer\RulesEngineBundle\Form\Type\RuleEditorType
+        tags:
+            - { name: form.type, alias: ruleeditor }
+
+    jms_serializer.naming_strategy:
+        class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+
+    jms_serializer.object_constructor:
+        alias: jms_serializer.doctrine_object_constructor
+        public: false
+
+    opifer.rulesengine.provider.pool:
+        class: Opifer\RulesEngineBundle\Provider\Pool
+        arguments: []
+
+    # Providers
+
+    opifer.rulesengine.provider.doctrine:
+        class: Opifer\RulesEngineBundle\Provider\DoctrineProvider
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: opifer.rulesengine.provider, alias: doctrine }
+
+    # Twig Extension
+
+    opifer.rules_engine.templating.twig_extension:
+        class: Opifer\RulesEngineBundle\Templating\TwigExtension
+        arguments: [@opifer.rulesengine.provider.doctrine]
+        tags:
+            - { name: twig.extension }

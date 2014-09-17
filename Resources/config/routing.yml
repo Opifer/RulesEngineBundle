@@ -1,0 +1,4 @@
+_opifer_api_rule:
+    resource: "@OpiferRulesEngineBundle/Api/RuleController.php"
+    type:     annotation
+    prefix:   /api

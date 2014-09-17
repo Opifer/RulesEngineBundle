@@ -1,0 +1,16 @@
+{% extends 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig' %}
+
+{#
+    Rule Editor Widget
+#}
+{% block ruleeditor_widget %}
+{% spaceless %}
+    <rule-editor formid="{{ id }}"
+                 name="{{ full_name }}"
+                 value="{{ form.vars.value|replace({"\n": '', ' ': ''})|json_encode() }}"
+                 provider="{{ provider }}"
+                 context="{{ context | default("") }}"
+                 modelattribute="{{ attr['ng-model']|default('') }}">
+    </rule-editor>
+{% endspaceless %}
+{% endblock %}
