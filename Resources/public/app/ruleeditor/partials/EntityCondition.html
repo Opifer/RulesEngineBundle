@@ -4,7 +4,7 @@
 <div class="cell">
     <!--<div class="well">{{ subject.right.value | json: object }}</div>-->
     <ul class="list-group" ng-if="subject.right.value.length">
-        <li class="list-group-item" ng-repeat="key in subject.right.value">{{ key }} <a class="glyphicon glyphicon-remove danger pull-right" ng-click="unpickObject(key)"></a></li>
+        <li class="list-group-item" ng-repeat="key in subject.right.value">{{ key }} <a class="fa fa-remove danger pull-right" ng-click="unpickObject(key)"></a></li>
     </ul>
     <button type="button" class="btn btn-default" ng-click="isPickerOpen = !isPickerOpen">Add item</button>
     <ng-modal show="isPickerOpen">

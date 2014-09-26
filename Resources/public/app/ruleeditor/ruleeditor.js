@@ -95,7 +95,7 @@ angular.module('OpiferRulesEngine', [])
             '        <div ng-include = "getTemplate()"></div>' +
             '    </div>' +
             '    <div class="controls">' +
-            '         <a class="glyphicon glyphicon-remove danger" ng-click="remove()"></a> ' +
+            '         <a class="fa fa-remove danger" ng-click="remove()"></a> ' +
             '    </div>' +
             '</div>' +
             '<div class="children" ng-if="subject.hasOwnProperty(\'children\')">' +
