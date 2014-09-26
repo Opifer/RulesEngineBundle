@@ -15,12 +15,12 @@ angular.module('OpiferRulesEngine', [])
             '<div class="ruleeditor">' +
             '    <div class="rule" ng-if="!rule">' +
             '       <div class="layoutselect">' +
-            '           <select class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="selected" ng-change="selectRule()">'+
+            '           <select name="catalog" class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="selected" ng-change="selectRule()">'+
             '               <option value="">Add rule…</option>'+
             '           </select> ' +
             '       </div>' +
             '    </div>' +
-            '   <div ng-if="rule"><rule subject="rule" catalog="catalog"></rule></div>' +
+            '    <div ng-if="rule"><rule subject="rule" catalog="catalog"></rule></div>' +
             '</div>' +
             //'<div class="row"><div class="col-xs-12"><pre>{{rule | json: object }}</pre></div></div>' +
             '';
@@ -102,7 +102,9 @@ angular.module('OpiferRulesEngine', [])
             '   <div ng-repeat="child in subject.children track by $index"><rule subject="child" catalog="catalog"></rule></div>' +
             '   <div class="rule">' +
             '       <div class="layoutselect">' +
-            '           <select class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="newrule" ng-change="addRule()"><option value="">Add rule…</option></select> ' +
+            '           <select name="rule_catalog" class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="newrule" ng-change="addRule()">'+
+            '               <option value="">Add rule…</option>'+
+            '           </select> ' +
             '       </div>' +
             '   </div>' +
             '</div>'
@@ -134,7 +136,7 @@ angular.module('OpiferRulesEngine', [])
                     this.newrule = null;
                 };
                 scope.getTemplate = function() {
-                    return  '/bundles/opiferrulesengine/app/ruleeditor/partials/'+ scope.subject._class +'.html';
+                    return '/bundles/opiferrulesengine/app/ruleeditor/partials/'+ scope.subject._class +'.html';
                 };
                 scope.pickObject = function (objectId) {
                     if (angular.isUndefined(scope.subject.right.value)) {
