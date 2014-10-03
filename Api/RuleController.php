@@ -32,8 +32,12 @@ class RuleController extends Controller
      *
      * @return Response
      */
-    public function indexAction(Request $request, $provider)
+    public function indexAction(Request $request, $provider = null)
     {
+        if (is_null($provider)) {
+            $provider = 'default';
+        }
+        
         $provider = $this->get('opifer.rulesengine.provider.pool')->getProvider($provider);
 
         if ($request->get('context')) {

@@ -1,7 +1,7 @@
 angular.module('OpiferRulesEngine', [])
 
     .factory('RuleService', ['$resource', function($resource) {
-        return $resource('/app_dev.php/api/rules/:provider', {
+        return $resource(Routing.generate('opifer.api.rule')+'/:provider', {
             provider: "@provider"
         });
     }])
