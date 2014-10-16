@@ -15,29 +15,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class RuleEditorType extends AbstractType
 {
-
     /**
      * {@inheritDoc}
      */
-    public function getDefaultOptions(array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $options = parent::getDefaultOptions($options);
-        $options['provider'] = 'doctrine';
-        $options['context'] = 'null';
-
-        return $options;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults([
-            'compound' => false,
-            'provider' => 'doctrine',
-            'context' => null,
-        ]);
+        $builder
+            ->setAttribute('provider', $options['provider'])
+            ->setAttribute('context', $options['context'])
+        ;
     }
 
     /**
@@ -54,12 +40,13 @@ class RuleEditorType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $builder
-            ->setAttribute('provider', $options['provider'])
-            ->setAttribute('context', $options['context'])
-        ;
+        $resolver->setDefaults([
+            'compound' => false,
+            'provider' => 'doctrine',
+            'context' => null,
+        ]);
     }
 
     /**

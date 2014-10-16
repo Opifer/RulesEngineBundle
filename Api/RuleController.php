@@ -9,9 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Opifer\RulesEngine\Rule\Rule;
-use Opifer\RulesEngine\RulesEngine;
-
 /**
  * Rule Controller
  *
@@ -32,12 +29,8 @@ class RuleController extends Controller
      *
      * @return Response
      */
-    public function indexAction(Request $request, $provider = null)
-    {
-        if (is_null($provider)) {
-            $provider = 'default';
-        }
-        
+    public function indexAction(Request $request, $provider = 'default')
+    {   
         $provider = $this->get('opifer.rulesengine.provider.pool')->getProvider($provider);
 
         if ($request->get('context')) {
