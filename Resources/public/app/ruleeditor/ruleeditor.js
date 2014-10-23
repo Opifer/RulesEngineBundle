@@ -13,8 +13,8 @@ angular.module('OpiferRulesEngine', [])
         tpl =
             '<input type="hidden" id="{{ formid }}" name="{{ name }}" value="{{ rule }}">' +
             '<div class="ruleeditor">' +
-            '    <div class="rule" ng-if="!rule">' +
-            '       <div class="layoutselect">' +
+            '    <div class="rule form-group row" ng-if="!rule">' +
+            '       <div class="layoutselect col-xs-6">' +
             '           <select name="catalog" class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="selected" ng-change="selectRule()">'+
             '               <option value="">Add rule…</option>'+
             '           </select> ' +
@@ -39,7 +39,11 @@ angular.module('OpiferRulesEngine', [])
             template: tpl,
             controller: function($scope, $http, $attrs, RuleService) {
                 if ($scope.value.length <= 2 || typeof $scope.value === "undefined" || $scope.value === null) {
-                   $scope.rule = null;
+                   $scope.rule = {
+                      "name": "Rule Set",
+                      "children": [],
+                      "_class": "RuleSet"
+                    };
                 } else {
                     var json = JSON.parse($scope.value);
                     $scope.rule = angular.fromJson(json);
@@ -87,21 +91,21 @@ angular.module('OpiferRulesEngine', [])
      */
     .directive('rule', ['$compile', function($compile) {
         var tpl =
-            '<div class="rule">' +
-            '    <div class="cell">' +
+            '<div class="rule form-group row" ng-if="subject._class != \'RuleSet\'">' +
+            '    <div class="cell col-xs-2">' +
             '        <label class="control-label">{{ subject.name }}</label>' +
             '    </div>' +
-            '    <div class="values">' +
-            '        <div ng-include = "getTemplate()"></div>' +
+            '    <div class="values pull-left">' +
+            '        <div ng-include="getTemplate()"></div>' +
             '    </div>' +
-            '    <div class="controls">' +
+            '    <div class="controls col-xs-2">' +
             '         <a class="fa fa-remove danger" ng-click="remove()"></a> ' +
             '    </div>' +
             '</div>' +
-            '<div class="children" ng-if="subject.hasOwnProperty(\'children\')">' +
+            '<div class="children form-group row" ng-if="subject.hasOwnProperty(\'children\')">' +
             '   <div ng-repeat="child in subject.children track by $index"><rule subject="child" catalog="catalog"></rule></div>' +
-            '   <div class="rule">' +
-            '       <div class="layoutselect">' +
+            '   <div class="rule form-group row">' +
+            '       <div class="layoutselect col-xs-6">' +
             '           <select name="rule_catalog" class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="newrule" ng-change="addRule()">'+
             '               <option value="">Add rule…</option>'+
             '           </select> ' +
@@ -148,14 +152,14 @@ angular.module('OpiferRulesEngine', [])
                     scope.subject.right.value.splice( scope.subject.right.value.indexOf(objectId), 1 );
                 };
                 scope.selectObject = function($event, id) {
-                  var checkbox = $event.target;
-                  (checkbox.checked) ? scope.pickObject(id) : scope.unpickObject(id);
+                    var checkbox = $event.target;
+                    (checkbox.checked) ? scope.pickObject(id) : scope.unpickObject(id);
                 };
                 scope.isObjectSelected = function(id) {
-                  if (angular.isUndefined(scope.subject.right.value)) {
-                      return false;
-                  }
-                  return scope.subject.right.value.indexOf(id) >= 0;
+                    if (angular.isUndefined(scope.subject.right.value)) {
+                        return false;
+                    }
+                    return scope.subject.right.value.indexOf(id) >= 0;
                 };
                 
                 // Get options from catalog rather than subject to ensure an

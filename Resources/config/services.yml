@@ -1,4 +1,5 @@
 parameters:
+    opifer.rulesengine.entity_provider.class: Opifer\RulesEngineBundle\Provider\EntityProvider
 
 services:
     opifer.rulesengine.form.ruleeditor:
@@ -13,22 +14,19 @@ services:
         alias: jms_serializer.doctrine_object_constructor
         public: false
 
+    # Providers
     opifer.rulesengine.provider.pool:
         class: Opifer\RulesEngineBundle\Provider\Pool
-        arguments: []
 
-    # Providers
-
-    opifer.rulesengine.provider.doctrine:
-        class: Opifer\RulesEngineBundle\Provider\DoctrineProvider
-        arguments: [@doctrine.orm.entity_manager]
+    opifer.rulesengine.entity_provider:
+        class: %opifer.rulesengine.entity_provider.class%
+        arguments: [@opifer.crud.entity_helper]
         tags:
-            - { name: opifer.rulesengine.provider, alias: doctrine }
+            - { name: opifer.rulesengine.provider, alias: entity }
 
     # Twig Extension
-
     opifer.rules_engine.templating.twig_extension:
         class: Opifer\RulesEngineBundle\Templating\TwigExtension
-        arguments: [@opifer.rulesengine.provider.doctrine]
+        arguments: [@opifer.rulesengine.entity_provider]
         tags:
             - { name: twig.extension }

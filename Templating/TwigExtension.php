@@ -2,24 +2,24 @@
 
 namespace Opifer\RulesEngineBundle\Templating;
 
-use Opifer\RulesEngineBundle\Provider\DoctrineProvider;
+use Opifer\RulesEngineBundle\Provider\ProviderInterface;
 
 /**
- * @todo Make this independent from the DoctrineProvider
+ * @todo Make this independent from the ProviderInterface
  */
 class TwigExtension extends \Twig_Extension
 {
     /**
-     * @var DoctrineProvider
+     * @var ProviderInterface
      */
     protected $rulesEngineProvider;
 
     /**
      * Constructor
      *
-     * @param DoctrineProvider $rulesEngineProvider
+     * @param ProviderInterface $rulesEngineProvider
      */
-    public function __construct(DoctrineProvider $rulesEngineProvider)
+    public function __construct(ProviderInterface $rulesEngineProvider)
     {
         $this->rulesEngineProvider = $rulesEngineProvider;
     }

@@ -1,6 +1,12 @@
-<div class="cell">
-    <select ng-model="subject.operator" ng-options="operator for operator in subject.operatorOpts" class="form-control"></select>
+<div class="cell col-xs-2">
+    <input ng-if="subject.operatorOpts.length == 1" ng-repeat="operator in subject.operatorOpts" value="{{ operator }}" class="form-control" disabled>
+    <select ng-model="subject.operator" ng-if="subject.operatorOpts.length > 1" ng-options="operator for operator in subject.operatorOpts" class="form-control"></select>
 </div>
-<div class="cell">
-    <input type="text" ng-model="subject.right.value" class="form-control" />
+<div class="cell col-xs-2">
+    <input type="text" ng-if="subject.type == 'string'" ng-model="subject.right.value" class="form-control" />
+    <input type="number" ng-if="subject.type == 'integer'" ng-model="subject.right.value" class="form-control" />
+    <select ng-if="subject.type == 'boolean'" ng-model="subject.right.value" ng-init="subject.right.value= subject.right.value == null ? 1 : subject.right.value" class="form-control">
+        <option value="1">True</option>
+        <option value="0">False</option>
+    </select>
 </div>
