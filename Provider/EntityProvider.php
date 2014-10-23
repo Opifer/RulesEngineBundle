@@ -7,9 +7,6 @@ use Doctrine\ORM\EntityManager;
 use Opifer\CrudBundle\Doctrine\EntityHelper;
 use Opifer\RulesEngine\Rule\Condition\AttributeCondition;
 use Opifer\RulesEngine\Rule\Condition\Condition;
-use Opifer\RulesEngine\Rule\Condition\ConditionSet;
-use Opifer\RulesEngine\Rule\Rule;
-use Opifer\RulesEngine\Rule\RuleSet;
 
 class EntityProvider extends AbstractProvider implements ProviderInterface
 {
@@ -36,7 +33,6 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
     public function buildRules()
     {
         $rules = array();
-        $rules[] = new ConditionSet();
 
         foreach ($this->entityHelper->getProperties($this->context) as $property) {
 
