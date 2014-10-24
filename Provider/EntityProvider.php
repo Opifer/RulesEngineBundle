@@ -41,7 +41,7 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
 
             $condition = new AttributeCondition();
             $condition
-                ->setName($property['fieldName'])
+                ->setName(ucfirst($property['fieldName']))
                 ->setEntity($this->context)
                 ->setAttribute($property['fieldName'])
                 ->setType($property['type'])
