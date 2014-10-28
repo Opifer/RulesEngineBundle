@@ -13,7 +13,7 @@
         "php": ">=5.4",
         "symfony/framework-bundle": "~2.4",
 
-        "opifer/rulesengine": "dev-master"
+        "opifer/rulesengine": "@dev"
     },
     "autoload": {
         "psr-4": { "Opifer\\RulesEngineBundle\\": "" }
