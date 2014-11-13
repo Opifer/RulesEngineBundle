@@ -15,7 +15,7 @@ angular.module('OpiferRulesEngine', [])
             '<div class="ruleeditor">' +
             '    <div class="rule form-group row" ng-if="!rule">' +
             '       <div class="layoutselect col-xs-6">' +
-            '           <select name="catalog" class="form-control" ng-options="item.name group by item.group for item in catalog" ng-model="selected" ng-change="selectRule()">'+
+            '           <select name="catalog" class="form-control" ng-options="item.name group by item.relation for item in catalog" ng-model="selected" ng-change="selectRule()">'+
             '               <option value="">Add rule…</option>'+
             '           </select> ' +
             '       </div>' +

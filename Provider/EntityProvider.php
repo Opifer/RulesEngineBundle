@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 
 use Opifer\CrudBundle\Doctrine\EntityHelper;
 use Opifer\RulesEngine\Rule\Condition\AttributeCondition;
+use Opifer\RulesEngine\Rule\Condition\RelationCondition;
 use Opifer\RulesEngine\Rule\Condition\Condition;
 
 class EntityProvider extends AbstractProvider implements ProviderInterface
@@ -35,10 +36,6 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
         $rules = array();
 
         foreach ($this->entityHelper->getProperties($this->context) as $property) {
-
-            $className = $this->entityHelper->getMetaData($this->context)->getName();
-            $className = (false === strpos($className, '\\')) ? $className : substr($className, strrpos($className, '\\') + 1);
-
             $condition = new AttributeCondition();
             $condition
                 ->setName(ucfirst($property['fieldName']))
@@ -48,6 +45,20 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
             ;
 
             $rules[] = $condition;
+        }
+
+        foreach ($this->entityHelper->getRelations($this->context) as $key => $relation) {
+            foreach ($this->entityHelper->getProperties($relation['targetEntity']) as $relProperty) {
+                $condition = new RelationCondition();
+                $condition->setName(ucfirst($key) . ' ' .ucfirst($relProperty['fieldName']));
+                $condition->setRelation($key);
+                $condition->setEntity($relation['targetEntity']);
+                $condition->setAttribute($relProperty['fieldName']);
+                $condition->setType($relProperty['type']);
+
+                $rules[] = $condition;
+            }
+            
         }
 
         return $rules;
