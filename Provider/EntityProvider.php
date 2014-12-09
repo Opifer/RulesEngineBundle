@@ -9,6 +9,7 @@ use Opifer\RulesEngine\Rule\Condition\AttributeCondition;
 use Opifer\RulesEngine\Rule\Condition\RelationCondition;
 use Opifer\RulesEngine\Rule\Condition\Condition;
 use Opifer\RulesEngine\Rule\Rule;
+use Opifer\RulesEngine\Rule\RuleSet;
 
 /**
  * Entity Provider
@@ -42,7 +43,7 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
      */
     public function buildRules()
     {
-        $rules = array();
+        $rules = [];
 
         foreach ($this->entityHelper->getProperties($this->context) as $property) {
             $condition = new AttributeCondition();
@@ -67,7 +68,7 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
 
                 $rules[] = $condition;
             }
-            
+
         }
 
         return $rules;
@@ -78,13 +79,31 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
      */
     public function evaluate(Rule $rule)
     {
-        // use exotic alias because we use entity's own repository
-        $qb = $this->em->getRepository($rule->getEntity())
-            ->createQueryBuilder('a');
-
         $environment = new DoctrineEnvironment();
+
+        // use exotic alias because we use entity's own repository
+        $qb = $this->em->getRepository($this->getEntity($rule))->createQueryBuilder('a');
+
         $environment->queryBuilder = $qb;
 
         return $environment->evaluate($rule);
+    }
+
+    /**
+     * Get the entity from the passed rule
+     *
+     * @param Rule $rule
+     */
+    protected function getEntity(Rule $rule)
+    {
+        if ($rule instanceof RuleSet) {
+            foreach ($rule->getChildren() as $child) {
+                return $child->getEntity();
+            }
+
+            throw new \Exception(sprintf('The rule %s and non of its children have an entity', get_class($rule)));
+        }
+
+        return $rule->getEntity();
     }
 }
