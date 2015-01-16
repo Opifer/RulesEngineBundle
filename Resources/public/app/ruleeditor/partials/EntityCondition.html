@@ -1,10 +1,12 @@
 <div class="cell col-xs-2">
     <select ng-model="subject.operator" ng-options="operator for operator in subject.operatorOpts" class="form-control"></select>
 </div>
-<div class="cell col-xs-2">
+<div class="cell value-cell col-xs-2">
     <ul class="list-group" ng-if="subject.right.value.length">
-        <li class="list-group-item" ng-repeat="key in subject.right.value">{{ key }} <a class="fa fa-remove danger pull-right" ng-click="unpickObject(key)"></a></li>
+        <li class="list-group-item" ng-repeat="something in configuration.items">
+            {{something.name}} <a class="fa fa-remove danger pull-right" ng-click="unpickObject(something.id)"></a>
+        </li>
     </ul>
 
-    <entity-picker url="subject.searchUrl" subject="subject"></entity-picker>
+    <entity-picker subject="subject" configuration="configuration"></entity-picker>
 </div>
