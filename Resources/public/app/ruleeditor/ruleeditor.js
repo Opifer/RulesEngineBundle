@@ -25,7 +25,7 @@ rulesengine.directive('ruleEditor', function() {
         '    </div>' +
         '    <div ng-if="rule"><rule subject="rule" catalog="catalog"></rule></div>' +
         '</div>' +
-        '<div class="row"><div class="col-xs-12"><pre>{{rule | json: object }}</pre></div></div>' +
+        //'<div class="row"><div class="col-xs-12"><pre>{{rule | json: object }}</pre></div></div>' +
         '';
 
     return {
@@ -42,10 +42,10 @@ rulesengine.directive('ruleEditor', function() {
         template: tpl,
         controller: function($scope, $http, $attrs, $injector, RuleService) {
             if ($scope.value.length <= 2 || typeof $scope.value === "undefined" || $scope.value === null) {
-               $scope.rule = {
-                  "name": "Rule Set",
-                  "children": [],
-                  "_class": "RuleSet"
+                $scope.rule = {
+                    "name": "Rule Set",
+                    "children": [],
+                    "_class": "RuleSet"
                 };
             } else {
                 var json = JSON.parse($scope.value);
