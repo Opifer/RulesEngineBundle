@@ -4,8 +4,7 @@
 <div class="cell value-cell col-xs-2">
     <ul class="list-group" ng-if="subject.right.value.length">
         <li class="list-group-item" ng-repeat="item in configuration.items">
-            <a href="{{ configuration.itemUrl(item.id) }}">{{item.name}}</a>
-            <a class="fa fa-remove danger pull-right" ng-click="unpickObject(item.id)"></a>
+            {{item.name}} <a class="fa fa-remove danger pull-right" ng-click="unpickObject(item.id)"></a>
         </li>
     </ul>
 
