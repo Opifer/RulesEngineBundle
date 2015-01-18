@@ -136,7 +136,9 @@ rulesengine.directive('rule', ['$compile', '$injector', function($compile, $inje
                 // If the scope has a configuration service name set, use that
                 // service.
                 if (!angular.isUndefined(scope.subject.configuration)) {
-                    scope.configuration = $injector.get(scope.subject.configuration);
+                    var configclass = $injector.get(scope.subject.configuration);
+                    scope.configuration = new configclass();
+
                     if (!angular.isUndefined(scope.subject.right) && !angular.isUndefined(scope.subject.right.value)) {
                         // Initialize the already added items
                         scope.configuration.initialize(scope.subject.right.value);
@@ -162,8 +164,8 @@ rulesengine.directive('rule', ['$compile', '$injector', function($compile, $inje
             };
             scope.getTemplate = function() {
                 if (!angular.isUndefined(scope.configuration) &&
-                    !angular.isUndefined(scope.configuration.template())) {
-                    return scope.configuration.template();
+                    !angular.isUndefined(scope.configuration.template)) {
+                    return scope.configuration.template;
                 }
 
                 return '/bundles/opiferrulesengine/app/ruleeditor/partials/'+ scope.subject._class +'.html';
