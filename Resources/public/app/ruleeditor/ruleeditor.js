@@ -102,7 +102,7 @@ rulesengine.directive('rule', ['$compile', '$injector', function($compile, $inje
         '        <div ng-include="getTemplate()"></div>' +
         '    </div>' +
         '    <div class="controls col-xs-2">' +
-        '         <a class="fa fa-remove danger" ng-click="remove()"></a> ' +
+        '         <a class="fa fa-times danger" ng-click="remove()"></a> ' +
         '    </div>' +
         '</div>' +
         '<div class="children form-group row" ng-if="subject.hasOwnProperty(\'children\')">' +
