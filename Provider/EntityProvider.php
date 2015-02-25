@@ -98,7 +98,6 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
      */
     public function evaluate(Rule $rule)
     {
-//        dump(get_class($rule));
         $environment = new DoctrineEnvironment();
 
         // use exotic alias because we use entity's own repository
