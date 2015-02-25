@@ -20,7 +20,7 @@ services:
 
     opifer.rulesengine.entity_provider:
         class: %opifer.rulesengine.entity_provider.class%
-        arguments: [@opifer.crud.entity_helper, @doctrine.orm.entity_manager]
+        arguments: [@opifer.crud.entity_helper, @doctrine.orm.entity_manager, @request_stack]
         tags:
             - { name: opifer.rulesengine.provider, alias: entity }
 

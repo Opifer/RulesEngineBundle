@@ -11,6 +11,9 @@ use Opifer\RulesEngine\Rule\Condition\Condition;
 use Opifer\RulesEngine\Rule\Rule;
 use Opifer\RulesEngine\Rule\RuleSet;
 
+use Doctrine\Common\Inflector\Inflector;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Entity Provider
  */
@@ -25,6 +28,21 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
      * @var EntityManager
      */
     protected $em;
+    
+    /**
+     * @var array 
+     */
+    protected $paramDefaults = [
+        'offset' => 0,
+        'limit' => 0,
+        'orderby' => ['title', 'created_at'],
+        'order' => ['ASC','DESC']
+    ];
+    
+    /**
+     * @var RequestStack 
+     */
+    protected $request;
 
     /**
      * Constructor
@@ -32,12 +50,13 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
      * @param EntityHelper  $entityHelper
      * @param EntityManager $em
      */
-    public function __construct(EntityHelper $entityHelper, EntityManager $em)
+    public function __construct(EntityHelper $entityHelper, EntityManager $em, RequestStack $requestStack)
     {
+        $this->request =  $requestStack->getCurrentRequest();
         $this->entityHelper = $entityHelper;
         $this->em = $em;
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -82,9 +101,9 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
         $environment = new DoctrineEnvironment();
 
         // use exotic alias because we use entity's own repository
-        $qb = $this->em->getRepository($this->getEntity($rule))->createQueryBuilder('a');
+        $this->qb = $this->em->getRepository($this->getEntity($rule))->createQueryBuilder('a');
 
-        $environment->queryBuilder = $qb;
+        $environment->queryBuilder = $this->qb;
 
         return $environment->evaluate($rule);
     }
@@ -105,5 +124,45 @@ class EntityProvider extends AbstractProvider implements ProviderInterface
         }
 
         return $rule->getEntity();
+    }
+    
+    /**
+     * Update query builder to include additional parameters
+     * 
+     * @param integer $id
+     * @param array $params
+     */
+    public function setQueryParams($id, $params = [])
+    {
+        $requestQuery = $this->request->query->get('query_id');
+        
+        if(isset($requestQuery[$id])) {
+            $paramsQuery = $requestQuery[$id];
+        } elseif(isset($params['query'])) {
+            $paramsQuery = $params['query'];
+        } else {
+            $paramsQuery = [];
+        }
+        
+        $query = array_merge([
+            'limit' => null,
+            'offset' => null,
+            'orderby' => null,
+            'order' => null
+        ], $paramsQuery);
+        
+        if($query['offset'] !== null && $query['offset'] >= $this->paramDefaults['offset']) {
+            $this->qb->setFirstResult($query['offset']);
+        }
+        
+        if($query['limit'] !== null && $query['limit'] >= $this->paramDefaults['limit']) {
+            $this->qb->setMaxResults($query['limit']);
+        }
+        
+        if(in_array($query['orderby'], $this->paramDefaults['orderby'])) {
+            $order = in_array(strtoupper($query['order']), $this->paramDefaults['order']) ? $query['order'] : $this->paramDefaults['order'][0];
+
+            $this->qb->orderBy('a.'.Inflector::camelize($query['orderby']), strtoupper($order));
+        }
     }
 }
