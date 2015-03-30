@@ -177,7 +177,12 @@ rulesengine.directive('rule', ['$compile', '$injector', function($compile, $inje
                 scope.subject.right.value.push(objectId);
             };
             scope.unpickObject = function (objectId) {
-                scope.subject.right.value.splice( scope.subject.right.value.indexOf(objectId), 1 );
+                // If the scope has a configuration service name set, use that service
+                if (!angular.isUndefined(scope.subject.configuration)) {
+                    scope.configuration.remove(objectId);
+                }
+
+                scope.subject.right.value.splice(scope.subject.right.value.indexOf(objectId), 1);
             };
             scope.selectObject = function($event, id) {
                 var checkbox = $event.target;
