@@ -1,4 +1,6 @@
-_opifer_api_rule:
-    resource: "@OpiferRulesEngineBundle/Api/RuleController.php"
-    type:     annotation
-    prefix:   /api
+opifer_rulesengine_rulesengine_condition:
+    path: /rulesengine/condition/{provider}
+    defaults: { _controller: OpiferRulesEngineBundle:RulesEngine:condition }
+    methods: [GET]
+    options:
+        expose: true
