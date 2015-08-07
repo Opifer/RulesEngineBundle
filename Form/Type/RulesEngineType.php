@@ -2,14 +2,28 @@
 
 namespace Opifer\RulesEngineBundle\Form\Type;
 
+use Opifer\RulesEngine\RulesEngine;
 use Opifer\RulesEngineBundle\Form\DataTransformer\SerializedConditionSetTransformer;
-use Opifer\RulesEngineBundle\Form\EventListener\ResizeRulesengineFormListener;
+use Opifer\RulesEngineBundle\Form\EventListener\ResizeConditionSetFormListener;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RulesEngineType extends CollectionType
 {
+    /** @var RulesEngine */
+    protected $rulesEngine;
+
+    /**
+     * Constructor
+     *
+     * @param RulesEngine $rulesEngine
+     */
+    public function __construct(RulesEngine $rulesEngine)
+    {
+        $this->rulesEngine = $rulesEngine;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -27,10 +41,11 @@ class RulesEngineType extends CollectionType
             $builder->setAttribute('prototype', $prototype->getForm());
         }
 
-        $transformer = new SerializedConditionSetTransformer();
+        $transformer = new SerializedConditionSetTransformer($this->rulesEngine);
         $builder->addModelTransformer($transformer);
 
-        $resizeListener = new ResizeRulesengineFormListener(
+        $resizeListener = new ResizeConditionSetFormListener(
+            $this->rulesEngine,
             $options['type'],
             $options['options'],
             $options['allow_add'],

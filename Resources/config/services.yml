@@ -1,17 +1,23 @@
 parameters:
+    opifer.rulesengine.class: Opifer\RulesEngine\RulesEngine
     opifer.rulesengine.doctrine_provider.class: Opifer\RulesEngineBundle\Provider\DoctrineProvider
     opifer.rulesengine.form.condition_type.class: Opifer\RulesEngineBundle\Form\Type\ConditionType
     opifer.rulesengine.form.rulesengine_type.class: Opifer\RulesEngineBundle\Form\Type\RulesEngineType
+    opifer.rulesengine.logical_provider.class: Opifer\RulesEngineBundle\Provider\LogicalProvider
     opifer.rulesengine.provider.pool.class: Opifer\RulesEngineBundle\Provider\Pool
     opifer.rulesengine.twig.rulesengine_extension.class: Opifer\RulesEngineBundle\Twig\RulesEngineExtension
 
 
 services:
 
+    opifer.rulesengine:
+        class: %opifer.rulesengine.class%
+
     # Form types
 
     opifer.rulesengine.form.rulesengine_type:
         class: %opifer.rulesengine.form.rulesengine_type.class%
+        arguments: [@opifer.rulesengine]
         tags:
             - { name: form.type, alias: rulesengine }
 
@@ -28,16 +34,22 @@ services:
 
     opifer.rulesengine.doctrine_provider:
         class: %opifer.rulesengine.doctrine_provider.class%
-        arguments: [@doctrine.orm.entity_manager, @request_stack]
+        arguments: [@opifer.rulesengine, @doctrine.orm.entity_manager, @request_stack]
         tags:
-            - { name: opifer.rulesengine.provider, alias: user }
+            - { name: opifer.rulesengine.provider, alias: doctrine }
         calls:
             - [setObject, ["AppBundle\Entity\User"]]
 
+    opifer.rulesengine.logical_provider:
+        class: %opifer.rulesengine.logical_provider.class%
+        arguments: [@opifer.rulesengine]
+        tags:
+            - { name: opifer.rulesengine.provider, alias: logical }
+
     # Twig Extension
 
-    opifer.rulesengine.twig.rulesengine_extension:
-        class: %opifer.rulesengine.twig.rulesengine_extension.class%
-        arguments: [@opifer.rulesengine.provider.pool]
-        tags:
-            - { name: twig.extension }
+#    opifer.rulesengine.twig.rulesengine_extension:
+#        class: %opifer.rulesengine.twig.rulesengine_extension.class%
+#        arguments: [@opifer.rulesengine.provider.pool]
+#        tags:
+#            - { name: twig.extension }

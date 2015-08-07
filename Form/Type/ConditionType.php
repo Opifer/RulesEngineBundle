@@ -66,9 +66,25 @@ class ConditionType extends AbstractType
             ]
         ]);
 
+        // Since we use javascript to change the `right` options, we need to make sure the right options match
+        // the selected left option at time of submitting the form.
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($provider, $options) {
+            $form = $event->getForm();
+            $submittedData = $event->getData();
+
+            $form->add('right', 'choice', [
+                'expanded' => false,
+                'multiple' => false,
+                'choices' => $provider->getRightsForLeft($submittedData['left']),
+                'attr' => [
+                    'class' => 'right'
+                ]
+            ]);
+        });
+
         // Set the right choices on PRE_SET_DATA,
         // so we can retrieve the rights related to the selected left value.
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($provider, $options) {
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($provider, $options) {
             $condition = $event->getData();
             $form = $event->getForm();
 
@@ -116,8 +132,12 @@ class ConditionType extends AbstractType
             return $provider->getLefts();
         } elseif ($options['lefts']) {
             $lefts = [];
-            foreach ($options['lefts'] as $left) {
-                $lefts[$left->getId()] = $left->getDisplayName();
+            foreach ($options['lefts'] as $key => $left) {
+                if (is_object($left)) {
+                    $lefts[$left->getId()] = $left->getDisplayName();
+                } else {
+                    $lefts[$key] = $left;
+                }
             }
 
             return $lefts;

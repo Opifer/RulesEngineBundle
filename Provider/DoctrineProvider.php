@@ -48,8 +48,10 @@ class DoctrineProvider extends AbstractProvider implements ProviderInterface
      * @param ObjectManager $om
      * @param RequestStack $requestStack
      */
-    public function __construct(ObjectManager $om, RequestStack $requestStack)
+    public function __construct(RulesEngine $rulesEngine, ObjectManager $om, RequestStack $requestStack)
     {
+        parent::__construct($rulesEngine);
+
         $this->request = $requestStack->getCurrentRequest();
         $this->om = $om;
     }

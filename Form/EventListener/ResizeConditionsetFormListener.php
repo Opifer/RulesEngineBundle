@@ -11,8 +11,28 @@ use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 /**
  * Maps the newly created rulesengine conditions to the form
  */
-class ResizeRulesengineFormListener extends ResizeFormListener
+class ResizeConditionSetFormListener extends ResizeFormListener
 {
+    /** @var RulesEngine */
+    protected $rulesEngine;
+
+    /**
+     * Constructor
+     *
+     * @param RulesEngine $rulesEngine
+     * @param array $type
+     * @param array $options
+     * @param bool $allowAdd
+     * @param bool $allowDelete
+     * @param bool $deleteEmpty
+     */
+    public function __construct(RulesEngine $rulesEngine, $type, array $options = array(), $allowAdd = false, $allowDelete = false, $deleteEmpty = false)
+    {
+        parent::__construct($type, $options, $allowAdd, $allowDelete, $deleteEmpty);
+
+        $this->rulesEngine = $rulesEngine;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -25,9 +45,8 @@ class ResizeRulesengineFormListener extends ResizeFormListener
             $data = array();
         }
 
-        $rulesEngine = new RulesEngine();
         try {
-            $data = $rulesEngine->deserialize($data);
+            $data = $this->rulesEngine->deserialize($data);
         } catch(\Exception $e) {
             $data = new ConditionSet();
         }

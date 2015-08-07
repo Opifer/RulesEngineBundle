@@ -36,8 +36,9 @@ class OperatorType extends AbstractType
             'multiple' => false,
             'choice_list' => new ArrayChoiceList($this->choices, function($choice) {
                 if ($choice instanceof OperatorInterface) {
-                    return $choice->getLabel();
+                    return get_class($choice);
                 }
+
                 return null;
             }),
         ]);

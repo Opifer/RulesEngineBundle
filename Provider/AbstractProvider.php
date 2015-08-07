@@ -9,6 +9,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractProvider implements ProviderInterface
 {
+    /** @var RulesEngine */
+    protected $rulesEngine;
+
+    /**
+     * Constructor
+     *
+     * @param RulesEngine $rulesEngine
+     */
+    public function __construct(RulesEngine $rulesEngine)
+    {
+        $this->rulesEngine = $rulesEngine;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -16,8 +29,7 @@ abstract class AbstractProvider implements ProviderInterface
     {
         $context = new Context();
 
-        $rulesEngine = new RulesEngine();
-        $rulesEngine->interpret($set, $context);
+        $this->rulesEngine->interpret($set, $context);
 
         return $context->getData();
     }

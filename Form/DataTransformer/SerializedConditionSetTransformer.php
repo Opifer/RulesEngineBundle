@@ -11,6 +11,17 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 class SerializedConditionSetTransformer implements DataTransformerInterface
 {
+    /** @var RulesEngine */
+    protected $rulesEngine;
+
+    /**
+     * @param RulesEngine $rulesEngine
+     */
+    public function __construct(RulesEngine $rulesEngine)
+    {
+        $this->rulesEngine = $rulesEngine;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -20,10 +31,8 @@ class SerializedConditionSetTransformer implements DataTransformerInterface
             return new ConditionSet();
         }
 
-        $rulesEngine = new RulesEngine();
-
         try {
-            $serialized = $rulesEngine->deserialize($json);
+            $serialized = $this->rulesEngine->deserialize($json);
         } catch(\Exception $e) {
             return new ConditionSet();
         }
@@ -40,8 +49,6 @@ class SerializedConditionSetTransformer implements DataTransformerInterface
             return;
         }
 
-        $rulesEngine = new RulesEngine();
-
-        return $rulesEngine->serialize($conditionSet);
+        return $this->rulesEngine->serialize($conditionSet);
     }
 }
