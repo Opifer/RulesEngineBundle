@@ -39,7 +39,6 @@ class ConditionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $provider = $this->providers->getProvider($options['provider']);
 
         if ($this->getLefts($provider, $options)) {
@@ -157,15 +156,24 @@ class ConditionType extends AbstractType
 
         $resolver->setDefaults([
             'data_class' => 'Opifer\RulesEngine\Condition\Condition',
-            'provider' => '',
             'lefts' => null
         ]);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBlockPrefix()
     {
         return 'condition';
     }
