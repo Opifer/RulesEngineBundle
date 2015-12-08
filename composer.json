@@ -2,7 +2,6 @@
     "name": "opifer/rulesengine-bundle",
     "type": "symfony-bundle",
     "description": "Opifer RulesEngineBundle",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Opifer",
@@ -11,9 +10,12 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/framework-bundle": "~2.4",
-
-        "opifer/rulesengine": "@dev"
+        "symfony/symfony": "~2.4",
+        "opifer/rulesengine": "dev-develop@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2.0",
+        "symfony/phpunit-bridge": "~2.7"
     },
     "autoload": {
         "psr-4": { "Opifer\\RulesEngineBundle\\": "" }

@@ -2,65 +2,59 @@
 
 namespace Opifer\RulesEngineBundle\Provider;
 
-use Opifer\RulesEngine\Environment\Environment;
-use Opifer\RulesEngine\Rule\Rule;
-use JMS\Serializer\Serializer;
+use Opifer\RulesEngine\Condition\ConditionSet;
+use Opifer\RulesEngine\Context\Context;
+use Opifer\RulesEngine\RulesEngine;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Base provider
- *
- * @author Opifer <info@opifer.nl>
- */
-abstract class AbstractProvider
+abstract class AbstractProvider implements ProviderInterface
 {
-    protected $context;
-    protected $environment;
+    /** @var RulesEngine */
+    protected $rulesEngine;
 
     /**
-     * Get environment
+     * Constructor
      *
-     * @return Environment
+     * @param RulesEngine $rulesEngine
      */
-    public function getEnvironment()
+    public function __construct(RulesEngine $rulesEngine)
     {
-        if (null === $this->environment) {
-            $this->environment = new Environment();
-        }
-
-        return $this->environment;
+        $this->rulesEngine = $rulesEngine;
     }
 
     /**
-     * Set context
-     *
-     * @param object $context
+     * {@inheritDoc}
      */
-    public function setContext($context)
+    public function evaluate(ConditionSet $set)
     {
-        $this->context = $context;
+        $context = new Context();
 
-        return $this;
+        $this->rulesEngine->interpret($set, $context);
+
+        return $context->getData();
     }
 
     /**
-     * Evaluate rule
-     *
-     * @param  Rule $rule
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
-    public function evaluate(Rule $rule)
+    public function getLefts()
     {
-        $this->getEnvironment()->evaluate($rule);
+        return null;
     }
 
     /**
-     * Get context
-     *
-     * @return object
+     * {@inheritDoc}
      */
-    public function getContext()
+    public function getOperators()
     {
-        return $this->context;
+        return [];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRights()
+    {
+        return null;
     }
 }

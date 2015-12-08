@@ -2,26 +2,27 @@
 
 namespace Opifer\RulesEngineBundle\Provider;
 
-use Opifer\RulesEngine\Rule\Rule;
+use Opifer\RulesEngine\Condition\ConditionSet;
 
 /**
  * Rulesengine provider interface
  */
 interface ProviderInterface
 {
-    /**
-     * Declares what rules are allowed in the rulesengine
-     *
-     * @return array
-     */
-    public function buildRules();
+    public function evaluate(ConditionSet $set);
 
     /**
-     * Performs the rule evaluation
-     *
-     * @param  Rule   $rule
-     *
-     * @return mixed
+     * @return null|array
      */
-    public function evaluate(Rule $rule);
+    public function getLefts();
+
+    /**
+     * @return null|array
+     */
+    public function getOperators();
+
+    /**
+     * @return null|array
+     */
+    public function getRights();
 }
