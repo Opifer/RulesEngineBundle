@@ -1,16 +1,55 @@
-{% extends 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig' %}
+{% block rulesengine_widget %}
+    {% spaceless %}
+        {% set prototype_html = '<div class="col-xs-10"><div class="row">'~form_widget(form.vars.prototype)~'</div></div>' %}
+        {% if form.vars.allow_delete %}
+            {% set prototype_html = prototype_html ~ '<div class="col-xs-2"><a href="#" class="btn btn-danger btn-sm" data-removefield="collection" data-field="__id__">Delete</a></div>' %}
+        {% endif %}
+        {% set prototype_html = '<div class="row">' ~ prototype_html ~ '</div>' %}
+        <div class="row">
+            <div id="{{ form.vars.id }}" class="col-xs-12" data-prototype="{{ prototype_html|e }}" data-prototype-name="__name__">
+                <ul class="bc-collection list-unstyled rulesengine-conditions">
+                    {% for field in form %}
+                        <li>
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <div class="row">
+                                        {{ form_widget(field) }}
+                                    </div>
+                                </div>
+                                {% if form.vars.allow_delete %}
+                                    <div class="col-xs-2">
+                                        <a href="#" class="btn btn-danger btn-sm" data-removefield="collection" data-field="{{ field.vars.id }}">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
-{#
-    Rule Editor Widget
-#}
-{% block ruleeditor_widget %}
-{% spaceless %}
-    <rule-editor formid="{{ id }}"
-                 name="{{ full_name }}"
-                 value="{{ form.vars.value|replace({"\n": '', ' ': ''})|json_encode() }}"
-                 provider="{{ provider }}"
-                 context="{{ context|default("") }}"
-                 modelattribute="{{ attr['ng-model']|default('') }}">
-    </rule-editor>
-{% endspaceless %}
-{% endblock %}
+        {% if form.vars.allow_add %}
+            <div class="row">
+                <div class="col-xs-4">
+                    <a href="#" class="btn btn-primary btn-sm" data-addfield="collection" data-collection="{{ form.vars.id }}" data-prototype-name="__name__">Add condition</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock rulesengine_widget %}
+
+{% block condition_widget %}
+    {% spaceless %}
+        <div class="form-group">
+            <div class="col-xs-4">
+                {{ form_widget(form.left) }}
+            </div>
+            <div class="col-xs-3">
+                {{ form_widget(form.operator) }}
+            </div>
+            <div class="col-xs-5">
+                {{ form_widget(form.right) }}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock condition_widget %}

@@ -2,65 +2,47 @@
 
 namespace Opifer\RulesEngineBundle\Provider;
 
-use Opifer\RulesEngine\Environment\Environment;
-use Opifer\RulesEngine\Rule\Rule;
-use JMS\Serializer\Serializer;
+use Opifer\RulesEngine\Condition\ConditionSet;
+use Opifer\RulesEngine\Context\Context;
+use Opifer\RulesEngine\RulesEngine;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Base provider
- *
- * @author Opifer <info@opifer.nl>
- */
-abstract class AbstractProvider
+abstract class AbstractProvider implements ProviderInterface
 {
-    protected $context;
-    protected $environment;
-
     /**
-     * Get environment
-     *
-     * @return Environment
+     * {@inheritDoc}
      */
-    public function getEnvironment()
+    public function evaluate(ConditionSet $set)
     {
-        if (null === $this->environment) {
-            $this->environment = new Environment();
-        }
+        $context = new Context();
 
-        return $this->environment;
+        $rulesEngine = new RulesEngine();
+        $rulesEngine->interpret($set, $context);
+
+        return $context->getData();
     }
 
     /**
-     * Set context
-     *
-     * @param object $context
+     * {@inheritDoc}
      */
-    public function setContext($context)
+    public function getLefts()
     {
-        $this->context = $context;
-
-        return $this;
+        return null;
     }
 
     /**
-     * Evaluate rule
-     *
-     * @param  Rule $rule
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
-    public function evaluate(Rule $rule)
+    public function getOperators()
     {
-        $this->getEnvironment()->evaluate($rule);
+        return [];
     }
 
     /**
-     * Get context
-     *
-     * @return object
+     * {@inheritDoc}
      */
-    public function getContext()
+    public function getRights()
     {
-        return $this->context;
+        return null;
     }
 }

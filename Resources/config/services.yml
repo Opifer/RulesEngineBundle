@@ -1,32 +1,43 @@
 parameters:
-    opifer.rulesengine.entity_provider.class: Opifer\RulesEngineBundle\Provider\EntityProvider
+    opifer.rulesengine.doctrine_provider.class: Opifer\RulesEngineBundle\Provider\DoctrineProvider
+    opifer.rulesengine.form.condition_type.class: Opifer\RulesEngineBundle\Form\Type\ConditionType
+    opifer.rulesengine.form.rulesengine_type.class: Opifer\RulesEngineBundle\Form\Type\RulesEngineType
+    opifer.rulesengine.provider.pool.class: Opifer\RulesEngineBundle\Provider\Pool
+    opifer.rulesengine.twig.rulesengine_extension.class: Opifer\RulesEngineBundle\Twig\RulesEngineExtension
+
 
 services:
-    opifer.rulesengine.form.ruleeditor:
-        class: Opifer\RulesEngineBundle\Form\Type\RuleEditorType
+
+    # Form types
+
+    opifer.rulesengine.form.rulesengine_type:
+        class: %opifer.rulesengine.form.rulesengine_type.class%
         tags:
-            - { name: form.type, alias: ruleeditor }
+            - { name: form.type, alias: rulesengine }
 
-    jms_serializer.naming_strategy:
-        class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
-
-    jms_serializer.object_constructor:
-        alias: jms_serializer.doctrine_object_constructor
-        public: false
+    opifer.rulesengine.form.condition_type:
+        class: %opifer.rulesengine.form.condition_type.class%
+        arguments: [@opifer.rulesengine.provider.pool]
+        tags:
+            - { name: form.type, alias: condition }
 
     # Providers
-    opifer.rulesengine.provider.pool:
-        class: Opifer\RulesEngineBundle\Provider\Pool
 
-    opifer.rulesengine.entity_provider:
-        class: %opifer.rulesengine.entity_provider.class%
-        arguments: [@opifer.crud.entity_helper, @doctrine.orm.entity_manager, @request_stack]
+    opifer.rulesengine.provider.pool:
+        class: %opifer.rulesengine.provider.pool.class%
+
+    opifer.rulesengine.doctrine_provider:
+        class: %opifer.rulesengine.doctrine_provider.class%
+        arguments: [@doctrine.orm.entity_manager, @request_stack]
         tags:
-            - { name: opifer.rulesengine.provider, alias: entity }
+            - { name: opifer.rulesengine.provider, alias: user }
+        calls:
+            - [setObject, ["AppBundle\Entity\User"]]
 
     # Twig Extension
-    opifer.rules_engine.templating.twig_extension:
-        class: Opifer\RulesEngineBundle\Templating\TwigExtension
-        arguments: [@opifer.rulesengine.entity_provider]
+
+    opifer.rulesengine.twig.rulesengine_extension:
+        class: %opifer.rulesengine.twig.rulesengine_extension.class%
+        arguments: [@opifer.rulesengine.provider.pool]
         tags:
             - { name: twig.extension }
